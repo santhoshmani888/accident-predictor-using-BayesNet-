@@ -1,0 +1,660 @@
+// ~->[DNET-1]->~
+
+// File created by GmytrasiewiczP_2 at UIC using Netica 5.24 on Oct 26, 2018 at 01:28:26 UTC.
+
+bnet Accident_probability {
+AutoCompile = TRUE;
+autoupdate = TRUE;
+whenchanged = 1540494821;
+
+visual V1 {
+	defdispform = BELIEFBARS;
+	nodelabeling = TITLE;
+	NodeMaxNumEntries = 50;
+	nodefont = font {shape= "Arial"; size= 9;};
+	linkfont = font {shape= "Arial"; size= 9;};
+	windowposn = (26, 26, 901, 332);
+	resolution = 72;
+	drawingbounds = (1345, 720);
+	showpagebreaks = FALSE;
+	usegrid = TRUE;
+	gridspace = (6, 6);
+	NodeSet Node {BuiltIn = 1; Color = 0x00e1e1e1;};
+	NodeSet Nature {BuiltIn = 1; Color = 0x00f8eed2;};
+	NodeSet Deterministic {BuiltIn = 1; Color = 0x00d3caa6;};
+	NodeSet Finding {BuiltIn = 1; Color = 0x00c8c8c8;};
+	NodeSet Constant {BuiltIn = 1; Color = 0x00ffffff;};
+	NodeSet ConstantValue {BuiltIn = 1; Color = 0x00ffffb4;};
+	NodeSet Utility {BuiltIn = 1; Color = 0x00ffbdbd;};
+	NodeSet Decision {BuiltIn = 1; Color = 0x00dee8ff;};
+	NodeSet Documentation {BuiltIn = 1; Color = 0x00f0fafa;};
+	NodeSet Title {BuiltIn = 1; Color = 0x00ffffff;};
+	PrinterSetting A {
+		margins = (1270, 1270, 1270, 1270);
+		};
+	};
+
+node Weather {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Sunny, Foggy, Rainy);
+	parents = ();
+	probs = 
+		// Sunny        Foggy        Rainy        
+		  (0.4,         0.25,        0.35);
+	whenchanged = 1540494799;
+	belief = (0.4, 0.25, 0.35);
+	visual V1 {
+		center = (96, 420);
+		height = 9;
+		};
+	};
+
+node Lighting {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Daylight, Night);
+	parents = ();
+	probs = 
+		// Daylight     Night        
+		  (0.5,         0.5);
+	whenchanged = 1540494803;
+	belief = (0.5, 0.5);
+	visual V1 {
+		center = (276, 312);
+		height = 10;
+		};
+	};
+
+node Vechicle_condition {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (good, bad);
+	parents = ();
+	probs = 
+		// good         bad          
+		  (0.35,        0.65);
+	whenchanged = 1540494807;
+	belief = (0.35, 0.65);
+	visual V1 {
+		center = (462, 306);
+		height = 11;
+		};
+	};
+
+node Traffic_control {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (No_control, Traffic_signal, Give_way_sign);
+	parents = ();
+	probs = 
+		// No control   Traffic signal Give way sign 
+		  (0.4,         0.3,         0.3);
+	whenchanged = 1540494821;
+	belief = (0.4, 0.3, 0.3);
+	visual V1 {
+		center = (906, 462);
+		height = 6;
+		};
+	};
+
+node drowsiness {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = ();
+	probs = 
+		// yes          no           
+		  (0.7,         0.3);
+	whenchanged = 1540434175;
+	belief = (0.7, 0.3);
+	visual V1 {
+		center = (126, 168);
+		height = 14;
+		};
+	};
+
+node driver_medical_cond {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Seizures, Strokes, Heart_Attacks, Impaired_Vision, Other_Conditions);
+	parents = ();
+	probs = 
+		// Seizures     Strokes      Heart Attacks Impaired Vision Other Conditions 
+		  (0.15,        0.2,         0.2,         0.2,         0.25);
+	whenchanged = 1540494717;
+	belief = (0.15, 0.2, 0.2, 0.2, 0.25);
+	visual V1 {
+		center = (162, 47);
+		height = 7;
+		};
+	};
+
+node medical_condition {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = (driver_medical_cond);
+	probs = 
+		// yes          no            // driver_medical_cond 
+		  (0.5,         0.5,          // Seizures            
+		   0.6,         0.4,          // Strokes             
+		   0.6,         0.4,          // Heart Attacks       
+		   0.8,         0.2,          // Impaired Vision     
+		   0.6,         0.4);         // Other Conditions    ;
+	whenchanged = 1540494699;
+	belief = (0.625, 0.375);
+	visual V1 {
+		center = (306, 168);
+		height = 15;
+		};
+	};
+
+node DUI_Alcohol {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = ();
+	probs = 
+		// yes          no           
+		  (0.7,         0.3);
+	whenchanged = 1540434177;
+	belief = (0.7, 0.3);
+	visual V1 {
+		center = (378, 60);
+		height = 17;
+		};
+	};
+
+node DUI_Recreational_drugs {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = ();
+	probs = 
+		// yes          no           
+		  (0.7,         0.3);
+	whenchanged = 1540434178;
+	belief = (0.7, 0.3);
+	visual V1 {
+		center = (558, 60);
+		height = 18;
+		};
+	};
+
+node intoxication {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = (DUI_Alcohol, DUI_Recreational_drugs);
+	probs = 
+		// yes          no            // DUI_Alcohol DUI_Recreational_drugs 
+		  (1,           0,            // yes         yes                    
+		   0.7,         0.3,          // yes         no                     
+		   0.7,         0.3,          // no          yes                    
+		   0.5,         0.5);         // no          no                     ;
+	whenchanged = 1540431525;
+	belief = (0.829, 0.171);
+	visual V1 {
+		center = (486, 168);
+		height = 16;
+		};
+	};
+
+node Drivers_mental_state {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (good, bad);
+	parents = (drowsiness, medical_condition, intoxication);
+	probs = 
+		// good         bad           // drowsiness medical_condition intoxication 
+		  (0,           1,            // yes        yes               yes          
+		   0.15,        0.85,         // yes        yes               no           
+		   0.15,        0.85,         // yes        no                yes          
+		   0.65,        0.35,         // yes        no                no           
+		   0.3,         0.7,          // no         yes               yes          
+		   0.7,         0.3,          // no         yes               no           
+		   0.3,         0.7,          // no         no                yes          
+		   1,           0);           // no         no                no           ;
+	whenchanged = 1540494810;
+	belief = (0.1893319, 0.8106681);
+	visual V1 {
+		center = (648, 312);
+		height = 12;
+		};
+	};
+
+node distracted_driving {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (using_mobile, reading_book, eating_food);
+	parents = ();
+	probs = 
+		// using mobile reading book eating food  
+		  (0.4,         0.4,         0.2);
+	whenchanged = 1540434098;
+	belief = (0.4, 0.4, 0.2);
+	visual V1 {
+		center = (672, 174);
+		height = 19;
+		};
+	};
+
+node Driver_experience {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (less_than_5, between_5_to_10, more_than_10);
+	parents = ();
+	probs = 
+		// less than 5  between 5 to 10 more than 10 
+		  (0.7,         0.2,         0.1);
+	whenchanged = 1540434348;
+	belief = (0.7, 0.2, 0.1);
+	visual V1 {
+		center = (1212, 408);
+		height = 1;
+		};
+	};
+
+node Incorrect_turn {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = ();
+	probs = 
+		// yes          no           
+		  (0.7,         0.3);
+	whenchanged = 1540434101;
+	belief = (0.7, 0.3);
+	visual V1 {
+		center = (762, 60);
+		height = 3;
+		};
+	};
+
+node change_wrong_lane {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = ();
+	probs = 
+		// yes          no           
+		  (0.7,         0.3);
+	whenchanged = 1540434104;
+	belief = (0.7, 0.3);
+	visual V1 {
+		center = (942, 60);
+		height = 4;
+		};
+	};
+
+node follow_too_close {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = ();
+	probs = 
+		// yes          no           
+		  (0.55,        0.45);
+	whenchanged = 1540434109;
+	belief = (0.55, 0.45);
+	visual V1 {
+		center = (1116, 72);
+		height = 5;
+		};
+	};
+
+node reverse_without_due_care {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (yes, no);
+	parents = ();
+	probs = 
+		// yes          no           
+		  (0.85,        0.15);
+	whenchanged = 1540434113;
+	belief = (0.85, 0.15);
+	visual V1 {
+		center = (1212, 174);
+		height = 2;
+		};
+	};
+
+node Driver_fault {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Yes, No);
+	parents = (distracted_driving, Driver_experience, Incorrect_turn, change_wrong_lane, follow_too_close, reverse_without_due_care);
+	probs = 
+		// Yes          No            // distracted_driving Driver_experience Incorrect_turn change_wrong_lane follow_too_close reverse_without_due_care 
+		  (1,           0,            // using mobile       less than 5       yes            yes               yes              yes                      
+		   0.95,        0.05,         // using mobile       less than 5       yes            yes               yes              no                       
+		   0.85,        0.15,         // using mobile       less than 5       yes            yes               no               yes                      
+		   0.75,        0.25,         // using mobile       less than 5       yes            yes               no               no                       
+		   0.75,        0.25,         // using mobile       less than 5       yes            no                yes              yes                      
+		   0.75,        0.25,         // using mobile       less than 5       yes            no                yes              no                       
+		   0.75,        0.25,         // using mobile       less than 5       yes            no                no               yes                      
+		   0.7,         0.3,          // using mobile       less than 5       yes            no                no               no                       
+		   0.95,        0.05,         // using mobile       less than 5       no             yes               yes              yes                      
+		   0.75,        0.25,         // using mobile       less than 5       no             yes               yes              no                       
+		   0.75,        0.25,         // using mobile       less than 5       no             yes               no               yes                      
+		   0.65,        0.35,         // using mobile       less than 5       no             yes               no               no                       
+		   0.75,        0.25,         // using mobile       less than 5       no             no                yes              yes                      
+		   0.7,         0.3,          // using mobile       less than 5       no             no                yes              no                       
+		   0.7,         0.3,          // using mobile       less than 5       no             no                no               yes                      
+		   0.65,        0.35,         // using mobile       less than 5       no             no                no               no                       
+		   0.85,        0.15,         // using mobile       between 5 to 10   yes            yes               yes              yes                      
+		   0.75,        0.25,         // using mobile       between 5 to 10   yes            yes               yes              no                       
+		   0.7,         0.3,          // using mobile       between 5 to 10   yes            yes               no               yes                      
+		   0.65,        0.35,         // using mobile       between 5 to 10   yes            yes               no               no                       
+		   0.75,        0.25,         // using mobile       between 5 to 10   yes            no                yes              yes                      
+		   0.75,        0.25,         // using mobile       between 5 to 10   yes            no                yes              no                       
+		   0.65,        0.35,         // using mobile       between 5 to 10   yes            no                no               yes                      
+		   0.6,         0.4,          // using mobile       between 5 to 10   yes            no                no               no                       
+		   0.8,         0.2,          // using mobile       between 5 to 10   no             yes               yes              yes                      
+		   0.65,        0.35,         // using mobile       between 5 to 10   no             yes               yes              no                       
+		   0.65,        0.35,         // using mobile       between 5 to 10   no             yes               no               yes                      
+		   0.65,        0.35,         // using mobile       between 5 to 10   no             yes               no               no                       
+		   0.65,        0.35,         // using mobile       between 5 to 10   no             no                yes              yes                      
+		   0.55,        0.45,         // using mobile       between 5 to 10   no             no                yes              no                       
+		   0.55,        0.45,         // using mobile       between 5 to 10   no             no                no               yes                      
+		   0.5,         0.5,          // using mobile       between 5 to 10   no             no                no               no                       
+		   0.7,         0.3,          // using mobile       more than 10      yes            yes               yes              yes                      
+		   0.65,        0.35,         // using mobile       more than 10      yes            yes               yes              no                       
+		   0.65,        0.35,         // using mobile       more than 10      yes            yes               no               yes                      
+		   0.55,        0.45,         // using mobile       more than 10      yes            yes               no               no                       
+		   0.65,        0.35,         // using mobile       more than 10      yes            no                yes              yes                      
+		   0.55,        0.45,         // using mobile       more than 10      yes            no                yes              no                       
+		   0.55,        0.45,         // using mobile       more than 10      yes            no                no               yes                      
+		   0.5,         0.5,          // using mobile       more than 10      yes            no                no               no                       
+		   0.7,         0.3,          // using mobile       more than 10      no             yes               yes              yes                      
+		   0.55,        0.45,         // using mobile       more than 10      no             yes               yes              no                       
+		   0.55,        0.45,         // using mobile       more than 10      no             yes               no               yes                      
+		   0.5,         0.5,          // using mobile       more than 10      no             yes               no               no                       
+		   0.55,        0.45,         // using mobile       more than 10      no             no                yes              yes                      
+		   0.5,         0.5,          // using mobile       more than 10      no             no                yes              no                       
+		   0.5,         0.5,          // using mobile       more than 10      no             no                no               yes                      
+		   0.45,        0.55,         // using mobile       more than 10      no             no                no               no                       
+		   0.95,        0.05,         // reading book       less than 5       yes            yes               yes              yes                      
+		   0.85,        0.15,         // reading book       less than 5       yes            yes               yes              no                       
+		   0.85,        0.15,         // reading book       less than 5       yes            yes               no               yes                      
+		   0.8,         0.2,          // reading book       less than 5       yes            yes               no               no                       
+		   0.85,        0.15,         // reading book       less than 5       yes            no                yes              yes                      
+		   0.8,         0.2,          // reading book       less than 5       yes            no                yes              no                       
+		   0.8,         0.2,          // reading book       less than 5       yes            no                no               yes                      
+		   0.7,         0.3,          // reading book       less than 5       yes            no                no               no                       
+		   0.85,        0.15,         // reading book       less than 5       no             yes               yes              yes                      
+		   0.8,         0.2,          // reading book       less than 5       no             yes               yes              no                       
+		   0.8,         0.2,          // reading book       less than 5       no             yes               no               yes                      
+		   0.7,         0.3,          // reading book       less than 5       no             yes               no               no                       
+		   0.8,         0.2,          // reading book       less than 5       no             no                yes              yes                      
+		   0.7,         0.3,          // reading book       less than 5       no             no                yes              no                       
+		   0.7,         0.3,          // reading book       less than 5       no             no                no               yes                      
+		   0.45,        0.55,         // reading book       less than 5       no             no                no               no                       
+		   0.85,        0.15,         // reading book       between 5 to 10   yes            yes               yes              yes                      
+		   0.8,         0.2,          // reading book       between 5 to 10   yes            yes               yes              no                       
+		   0.8,         0.2,          // reading book       between 5 to 10   yes            yes               no               yes                      
+		   0.75,        0.25,         // reading book       between 5 to 10   yes            yes               no               no                       
+		   0.8,         0.2,          // reading book       between 5 to 10   yes            no                yes              yes                      
+		   0.75,        0.25,         // reading book       between 5 to 10   yes            no                yes              no                       
+		   0.75,        0.25,         // reading book       between 5 to 10   yes            no                no               yes                      
+		   0.7,         0.3,          // reading book       between 5 to 10   yes            no                no               no                       
+		   0.85,        0.15,         // reading book       between 5 to 10   no             yes               yes              yes                      
+		   0.75,        0.25,         // reading book       between 5 to 10   no             yes               yes              no                       
+		   0.75,        0.25,         // reading book       between 5 to 10   no             yes               no               yes                      
+		   0.7,         0.3,          // reading book       between 5 to 10   no             yes               no               no                       
+		   0.75,        0.25,         // reading book       between 5 to 10   no             no                yes              yes                      
+		   0.7,         0.3,          // reading book       between 5 to 10   no             no                yes              no                       
+		   0.7,         0.3,          // reading book       between 5 to 10   no             no                no               yes                      
+		   0.6,         0.4,          // reading book       between 5 to 10   no             no                no               no                       
+		   0.8,         0.2,          // reading book       more than 10      yes            yes               yes              yes                      
+		   0.7,         0.3,          // reading book       more than 10      yes            yes               yes              no                       
+		   0.7,         0.3,          // reading book       more than 10      yes            yes               no               yes                      
+		   0.65,        0.35,         // reading book       more than 10      yes            yes               no               no                       
+		   0.7,         0.3,          // reading book       more than 10      yes            no                yes              yes                      
+		   0.65,        0.35,         // reading book       more than 10      yes            no                yes              no                       
+		   0.65,        0.35,         // reading book       more than 10      yes            no                no               yes                      
+		   0.55,        0.45,         // reading book       more than 10      yes            no                no               no                       
+		   0.7,         0.3,          // reading book       more than 10      no             yes               yes              yes                      
+		   0.65,        0.35,         // reading book       more than 10      no             yes               yes              no                       
+		   0.65,        0.35,         // reading book       more than 10      no             yes               no               yes                      
+		   0.55,        0.45,         // reading book       more than 10      no             yes               no               no                       
+		   0.65,        0.35,         // reading book       more than 10      no             no                yes              yes                      
+		   0.55,        0.45,         // reading book       more than 10      no             no                yes              no                       
+		   0.55,        0.45,         // reading book       more than 10      no             no                no               yes                      
+		   0.2,         0.8,          // reading book       more than 10      no             no                no               no                       
+		   0.85,        0.15,         // eating food        less than 5       yes            yes               yes              yes                      
+		   0.8,         0.2,          // eating food        less than 5       yes            yes               yes              no                       
+		   0.8,         0.2,          // eating food        less than 5       yes            yes               no               yes                      
+		   0.7,         0.3,          // eating food        less than 5       yes            yes               no               no                       
+		   0.8,         0.2,          // eating food        less than 5       yes            no                yes              yes                      
+		   0.7,         0.3,          // eating food        less than 5       yes            no                yes              no                       
+		   0.7,         0.3,          // eating food        less than 5       yes            no                no               yes                      
+		   0.65,        0.35,         // eating food        less than 5       yes            no                no               no                       
+		   0.85,        0.15,         // eating food        less than 5       no             yes               yes              yes                      
+		   0.8,         0.2,          // eating food        less than 5       no             yes               yes              no                       
+		   0.8,         0.2,          // eating food        less than 5       no             yes               no               yes                      
+		   0.65,        0.35,         // eating food        less than 5       no             yes               no               no                       
+		   0.8,         0.2,          // eating food        less than 5       no             no                yes              yes                      
+		   0.65,        0.35,         // eating food        less than 5       no             no                yes              no                       
+		   0.65,        0.35,         // eating food        less than 5       no             no                no               yes                      
+		   0.25,        0.75,         // eating food        less than 5       no             no                no               no                       
+		   0.9,         0.1,          // eating food        between 5 to 10   yes            yes               yes              yes                      
+		   0.85,        0.15,         // eating food        between 5 to 10   yes            yes               yes              no                       
+		   0.85,        0.15,         // eating food        between 5 to 10   yes            yes               no               yes                      
+		   0.8,         0.2,          // eating food        between 5 to 10   yes            yes               no               no                       
+		   0.85,        0.15,         // eating food        between 5 to 10   yes            no                yes              yes                      
+		   0.8,         0.2,          // eating food        between 5 to 10   yes            no                yes              no                       
+		   0.8,         0.2,          // eating food        between 5 to 10   yes            no                no               yes                      
+		   0.7,         0.3,          // eating food        between 5 to 10   yes            no                no               no                       
+		   0.8,         0.2,          // eating food        between 5 to 10   no             yes               yes              yes                      
+		   0.8,         0.2,          // eating food        between 5 to 10   no             yes               yes              no                       
+		   0.8,         0.2,          // eating food        between 5 to 10   no             yes               no               yes                      
+		   0.7,         0.3,          // eating food        between 5 to 10   no             yes               no               no                       
+		   0.8,         0.2,          // eating food        between 5 to 10   no             no                yes              yes                      
+		   0.7,         0.3,          // eating food        between 5 to 10   no             no                yes              no                       
+		   0.7,         0.3,          // eating food        between 5 to 10   no             no                no               yes                      
+		   0.4,         0.6,          // eating food        between 5 to 10   no             no                no               no                       
+		   0.85,        0.15,         // eating food        more than 10      yes            yes               yes              yes                      
+		   0.7,         0.3,          // eating food        more than 10      yes            yes               yes              no                       
+		   0.7,         0.3,          // eating food        more than 10      yes            yes               no               yes                      
+		   0.6,         0.4,          // eating food        more than 10      yes            yes               no               no                       
+		   0.75,        0.25,         // eating food        more than 10      yes            no                yes              yes                      
+		   0.75,        0.25,         // eating food        more than 10      yes            no                yes              no                       
+		   0.75,        0.25,         // eating food        more than 10      yes            no                no               yes                      
+		   0.75,        0.25,         // eating food        more than 10      yes            no                no               no                       
+		   0.8,         0.2,          // eating food        more than 10      no             yes               yes              yes                      
+		   0.75,        0.25,         // eating food        more than 10      no             yes               yes              no                       
+		   0.75,        0.25,         // eating food        more than 10      no             yes               no               yes                      
+		   0.75,        0.25,         // eating food        more than 10      no             yes               no               no                       
+		   0.75,        0.25,         // eating food        more than 10      no             no                yes              yes                      
+		   0.7,         0.3,          // eating food        more than 10      no             no                yes              no                       
+		   0.5,         0.5,          // eating food        more than 10      no             no                no               yes                      
+		   0.05,        0.95);        // eating food        more than 10      no             no                no               no                       ;
+	whenchanged = 1540494813;
+	belief = (0.808246, 0.191754);
+	visual V1 {
+		center = (846, 324);
+		height = 13;
+		};
+	};
+
+node Prob_of_Accident {
+	kind = NATURE;
+	discrete = TRUE;
+	chance = CHANCE;
+	states = (Yes, No);
+	parents = (Weather, Lighting, Vechicle_condition, Traffic_control, Drivers_mental_state, Driver_fault);
+	probs = 
+		// Yes          No            // Weather Lighting Vechicle_condition Traffic_control Drivers_mental_state Driver_fault 
+		  (0.55,        0.45,         // Sunny   Daylight good               No control      good                 Yes          
+		   0.25,        0.75,         // Sunny   Daylight good               No control      good                 No           
+		   0.55,        0.45,         // Sunny   Daylight good               No control      bad                  Yes          
+		   0.45,        0.55,         // Sunny   Daylight good               No control      bad                  No           
+		   0.2,         0.8,          // Sunny   Daylight good               Traffic signal  good                 Yes          
+		   0,           1,            // Sunny   Daylight good               Traffic signal  good                 No           
+		   0.65,        0.35,         // Sunny   Daylight good               Traffic signal  bad                  Yes          
+		   0.55,        0.45,         // Sunny   Daylight good               Traffic signal  bad                  No           
+		   0.65,        0.35,         // Sunny   Daylight good               Give way sign   good                 Yes          
+		   0,           1,            // Sunny   Daylight good               Give way sign   good                 No           
+		   0.45,        0.55,         // Sunny   Daylight good               Give way sign   bad                  Yes          
+		   0.45,        0.55,         // Sunny   Daylight good               Give way sign   bad                  No           
+		   0.9,         0.1,          // Sunny   Daylight bad                No control      good                 Yes          
+		   0.65,        0.35,         // Sunny   Daylight bad                No control      good                 No           
+		   0.9,         0.1,          // Sunny   Daylight bad                No control      bad                  Yes          
+		   0.85,        0.15,         // Sunny   Daylight bad                No control      bad                  No           
+		   0.35,        0.65,         // Sunny   Daylight bad                Traffic signal  good                 Yes          
+		   0.45,        0.55,         // Sunny   Daylight bad                Traffic signal  good                 No           
+		   0.9,         0.1,          // Sunny   Daylight bad                Traffic signal  bad                  Yes          
+		   0.6,         0.4,          // Sunny   Daylight bad                Traffic signal  bad                  No           
+		   0.6,         0.4,          // Sunny   Daylight bad                Give way sign   good                 Yes          
+		   0.25,        0.75,         // Sunny   Daylight bad                Give way sign   good                 No           
+		   0.75,        0.25,         // Sunny   Daylight bad                Give way sign   bad                  Yes          
+		   0.55,        0.45,         // Sunny   Daylight bad                Give way sign   bad                  No           
+		   0.35,        0.65,         // Sunny   Night    good               No control      good                 Yes          
+		   0.25,        0.75,         // Sunny   Night    good               No control      good                 No           
+		   0.55,        0.45,         // Sunny   Night    good               No control      bad                  Yes          
+		   0.45,        0.55,         // Sunny   Night    good               No control      bad                  No           
+		   0.4,         0.6,          // Sunny   Night    good               Traffic signal  good                 Yes          
+		   0,           1,            // Sunny   Night    good               Traffic signal  good                 No           
+		   0.7,         0.3,          // Sunny   Night    good               Traffic signal  bad                  Yes          
+		   0.55,        0.45,         // Sunny   Night    good               Traffic signal  bad                  No           
+		   0.35,        0.65,         // Sunny   Night    good               Give way sign   good                 Yes          
+		   0.1,         0.9,          // Sunny   Night    good               Give way sign   good                 No           
+		   0.7,         0.3,          // Sunny   Night    good               Give way sign   bad                  Yes          
+		   0.55,        0.45,         // Sunny   Night    good               Give way sign   bad                  No           
+		   0.85,        0.15,         // Sunny   Night    bad                No control      good                 Yes          
+		   0.65,        0.35,         // Sunny   Night    bad                No control      good                 No           
+		   0.9,         0.1,          // Sunny   Night    bad                No control      bad                  Yes          
+		   0.85,        0.15,         // Sunny   Night    bad                No control      bad                  No           
+		   0.85,        0.15,         // Sunny   Night    bad                Traffic signal  good                 Yes          
+		   0.45,        0.55,         // Sunny   Night    bad                Traffic signal  good                 No           
+		   0.65,        0.35,         // Sunny   Night    bad                Traffic signal  bad                  Yes          
+		   0.65,        0.35,         // Sunny   Night    bad                Traffic signal  bad                  No           
+		   0.55,        0.45,         // Sunny   Night    bad                Give way sign   good                 Yes          
+		   0.6,         0.4,          // Sunny   Night    bad                Give way sign   good                 No           
+		   0.8,         0.2,          // Sunny   Night    bad                Give way sign   bad                  Yes          
+		   0.6,         0.4,          // Sunny   Night    bad                Give way sign   bad                  No           
+		   0.45,        0.55,         // Foggy   Daylight good               No control      good                 Yes          
+		   0.55,        0.45,         // Foggy   Daylight good               No control      good                 No           
+		   0.88,        0.12,         // Foggy   Daylight good               No control      bad                  Yes          
+		   0.7,         0.3,          // Foggy   Daylight good               No control      bad                  No           
+		   0.65,        0.35,         // Foggy   Daylight good               Traffic signal  good                 Yes          
+		   0.3,         0.7,          // Foggy   Daylight good               Traffic signal  good                 No           
+		   0.95,        0.05,         // Foggy   Daylight good               Traffic signal  bad                  Yes          
+		   0.65,        0.35,         // Foggy   Daylight good               Traffic signal  bad                  No           
+		   0.65,        0.35,         // Foggy   Daylight good               Give way sign   good                 Yes          
+		   0.35,        0.65,         // Foggy   Daylight good               Give way sign   good                 No           
+		   0.7,         0.3,          // Foggy   Daylight good               Give way sign   bad                  Yes          
+		   0.65,        0.35,         // Foggy   Daylight good               Give way sign   bad                  No           
+		   0.55,        0.45,         // Foggy   Daylight bad                No control      good                 Yes          
+		   0.4,         0.6,          // Foggy   Daylight bad                No control      good                 No           
+		   0.85,        0.15,         // Foggy   Daylight bad                No control      bad                  Yes          
+		   0.55,        0.45,         // Foggy   Daylight bad                No control      bad                  No           
+		   0.65,        0.35,         // Foggy   Daylight bad                Traffic signal  good                 Yes          
+		   0.35,        0.65,         // Foggy   Daylight bad                Traffic signal  good                 No           
+		   0.9,         0.1,          // Foggy   Daylight bad                Traffic signal  bad                  Yes          
+		   0.6,         0.4,          // Foggy   Daylight bad                Traffic signal  bad                  No           
+		   0.75,        0.25,         // Foggy   Daylight bad                Give way sign   good                 Yes          
+		   0.45,        0.55,         // Foggy   Daylight bad                Give way sign   good                 No           
+		   0.7,         0.3,          // Foggy   Daylight bad                Give way sign   bad                  Yes          
+		   0.6,         0.4,          // Foggy   Daylight bad                Give way sign   bad                  No           
+		   0.6,         0.4,          // Foggy   Night    good               No control      good                 Yes          
+		   0.45,        0.55,         // Foggy   Night    good               No control      good                 No           
+		   0.7,         0.3,          // Foggy   Night    good               No control      bad                  Yes          
+		   0.45,        0.55,         // Foggy   Night    good               No control      bad                  No           
+		   0.55,        0.45,         // Foggy   Night    good               Traffic signal  good                 Yes          
+		   0.15,        0.85,         // Foggy   Night    good               Traffic signal  good                 No           
+		   0.8,         0.2,          // Foggy   Night    good               Traffic signal  bad                  Yes          
+		   0.65,        0.35,         // Foggy   Night    good               Traffic signal  bad                  No           
+		   0.55,        0.45,         // Foggy   Night    good               Give way sign   good                 Yes          
+		   0.25,        0.75,         // Foggy   Night    good               Give way sign   good                 No           
+		   0.75,        0.25,         // Foggy   Night    good               Give way sign   bad                  Yes          
+		   0.45,        0.55,         // Foggy   Night    good               Give way sign   bad                  No           
+		   0.6,         0.4,          // Foggy   Night    bad                No control      good                 Yes          
+		   0.5,         0.5,          // Foggy   Night    bad                No control      good                 No           
+		   0.9,         0.1,          // Foggy   Night    bad                No control      bad                  Yes          
+		   0.85,        0.15,         // Foggy   Night    bad                No control      bad                  No           
+		   0.55,        0.45,         // Foggy   Night    bad                Traffic signal  good                 Yes          
+		   0.25,        0.75,         // Foggy   Night    bad                Traffic signal  good                 No           
+		   0.7,         0.3,          // Foggy   Night    bad                Traffic signal  bad                  Yes          
+		   0.65,        0.35,         // Foggy   Night    bad                Traffic signal  bad                  No           
+		   0.6,         0.4,          // Foggy   Night    bad                Give way sign   good                 Yes          
+		   0.6,         0.4,          // Foggy   Night    bad                Give way sign   good                 No           
+		   0.95,        0.05,         // Foggy   Night    bad                Give way sign   bad                  Yes          
+		   0.8,         0.2,          // Foggy   Night    bad                Give way sign   bad                  No           
+		   0.55,        0.45,         // Rainy   Daylight good               No control      good                 Yes          
+		   0.45,        0.55,         // Rainy   Daylight good               No control      good                 No           
+		   0.65,        0.35,         // Rainy   Daylight good               No control      bad                  Yes          
+		   0.55,        0.45,         // Rainy   Daylight good               No control      bad                  No           
+		   0.4,         0.6,          // Rainy   Daylight good               Traffic signal  good                 Yes          
+		   0.25,        0.75,         // Rainy   Daylight good               Traffic signal  good                 No           
+		   0.75,        0.25,         // Rainy   Daylight good               Traffic signal  bad                  Yes          
+		   0.55,        0.45,         // Rainy   Daylight good               Traffic signal  bad                  No           
+		   0.55,        0.45,         // Rainy   Daylight good               Give way sign   good                 Yes          
+		   0.45,        0.55,         // Rainy   Daylight good               Give way sign   good                 No           
+		   0.55,        0.45,         // Rainy   Daylight good               Give way sign   bad                  Yes          
+		   0.4,         0.6,          // Rainy   Daylight good               Give way sign   bad                  No           
+		   0.7,         0.3,          // Rainy   Daylight bad                No control      good                 Yes          
+		   0.55,        0.45,         // Rainy   Daylight bad                No control      good                 No           
+		   0.85,        0.15,         // Rainy   Daylight bad                No control      bad                  Yes          
+		   0.65,        0.35,         // Rainy   Daylight bad                No control      bad                  No           
+		   0.55,        0.45,         // Rainy   Daylight bad                Traffic signal  good                 Yes          
+		   0.4,         0.6,          // Rainy   Daylight bad                Traffic signal  good                 No           
+		   0.65,        0.35,         // Rainy   Daylight bad                Traffic signal  bad                  Yes          
+		   0.65,        0.35,         // Rainy   Daylight bad                Traffic signal  bad                  No           
+		   0.5,         0.5,          // Rainy   Daylight bad                Give way sign   good                 Yes          
+		   0.4,         0.6,          // Rainy   Daylight bad                Give way sign   good                 No           
+		   0.85,        0.15,         // Rainy   Daylight bad                Give way sign   bad                  Yes          
+		   0.75,        0.25,         // Rainy   Daylight bad                Give way sign   bad                  No           
+		   0.65,        0.35,         // Rainy   Night    good               No control      good                 Yes          
+		   0.45,        0.55,         // Rainy   Night    good               No control      good                 No           
+		   0.75,        0.25,         // Rainy   Night    good               No control      bad                  Yes          
+		   0.65,        0.35,         // Rainy   Night    good               No control      bad                  No           
+		   0.6,         0.4,          // Rainy   Night    good               Traffic signal  good                 Yes          
+		   0.05,        0.95,         // Rainy   Night    good               Traffic signal  good                 No           
+		   0.65,        0.35,         // Rainy   Night    good               Traffic signal  bad                  Yes          
+		   0.6,         0.4,          // Rainy   Night    good               Traffic signal  bad                  No           
+		   0.55,        0.45,         // Rainy   Night    good               Give way sign   good                 Yes          
+		   0.5,         0.5,          // Rainy   Night    good               Give way sign   good                 No           
+		   0.7,         0.3,          // Rainy   Night    good               Give way sign   bad                  Yes          
+		   0.6,         0.4,          // Rainy   Night    good               Give way sign   bad                  No           
+		   0.7,         0.3,          // Rainy   Night    bad                No control      good                 Yes          
+		   0.65,        0.35,         // Rainy   Night    bad                No control      good                 No           
+		   0.8,         0.2,          // Rainy   Night    bad                No control      bad                  Yes          
+		   0.7,         0.3,          // Rainy   Night    bad                No control      bad                  No           
+		   0.65,        0.35,         // Rainy   Night    bad                Traffic signal  good                 Yes          
+		   0.55,        0.45,         // Rainy   Night    bad                Traffic signal  good                 No           
+		   0.9,         0.1,          // Rainy   Night    bad                Traffic signal  bad                  Yes          
+		   0.85,        0.15,         // Rainy   Night    bad                Traffic signal  bad                  No           
+		   0.7,         0.3,          // Rainy   Night    bad                Give way sign   good                 Yes          
+		   0.55,        0.45,         // Rainy   Night    bad                Give way sign   good                 No           
+		   0.7,         0.3,          // Rainy   Night    bad                Give way sign   bad                  Yes          
+		   0.6,         0.4);         // Rainy   Night    bad                Give way sign   bad                  No           ;
+	whenchanged = 1540438066;
+	belief = (0.7100377, 0.2899623);
+	visual V1 {
+		center = (504, 564);
+		height = 8;
+		};
+	};
+ElimOrder = (DUI_Alcohol, DUI_Recreational_drugs, driver_medical_cond, drowsiness, medical_condition, intoxication, Weather, Lighting, Vechicle_condition, Drivers_mental_state, Prob_of_Accident, Traffic_control, distracted_driving, Incorrect_turn, change_wrong_lane, follow_too_close, reverse_without_due_care, Driver_fault, Driver_experience);
+};
